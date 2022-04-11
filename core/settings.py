@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'rest_framework',
     'rest_framework_simplejwt',
+    'drf_yasg',
     'phonenumber_field',
     'crowdfunding',
     'crowdfunding_api',
@@ -131,7 +132,7 @@ REST_FRAMEWORK ={
     ],
     'DEFAULT_AUTHENTICATION_CLASSES': (
         'rest_framework_simplejwt.authentication.JWTAuthentication',
-    )
+    ),
 }
 
 # Default primary key field type

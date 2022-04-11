@@ -3,4 +3,4 @@ djangorestframework
 djangorestframework-simplejwt
 django-cors-headers
 django-phonenumber-field[phonenumbers]
-django-rest-swagger
+drf-yasg
