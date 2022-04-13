@@ -1,27 +1,50 @@
-import phonenumbers
-from rest_framework import serializers
-from .models import Person, PersonMore
+# import phonenumbers
+# from rest_framework import serializers
+# from .models import Person, User
 
-class PersonRegisterSerializer(serializers.ModelSerializer):
-    user = serializers.PrimaryKeyRelatedField(read_only=True,) #by default allow_null = False
-    full_name = serializers.CharField(required=True)
-    phonenumbers = serializers.CharField(required=True)
+# class UserSerializer(serializers.ModelSerializer):
+#     class Meta:
+#         model=User
+#         fields=['email', 'password']
 
-    def get_cleaned_data(self):
-            data = super(PersonRegisterSerializer, self).get_cleaned_data()
-            extra_data = {
-                'full_name' : self.validated_data.get('full_name', ''),
-                'phone_number' : self.validated_data.get('phone_number', ''),
-            }
-            data.update(extra_data)
-            return data
+# class PersonSignUpSerializer(serializers.ModelSerializer):
+#     person = UserSerializer()
+#     full_name = serializers.CharField(required=True)
+#     phone_number = serializers.CharField(required=True)
 
-    def save(self, request):
-        user = super(PersonRegisterSerializer, self).save(request)
-        user.is_seller = True
-        user.save()
-        seller = Person(seller=user, area=self.cleaned_data.get('area'), 
-                address=self.cleaned_data.get('address'),
-                description=self.cleaned_data.get('description'))
-        seller.save()
-        return user
+#     class Meta:
+#         model = Person
+#         fields = ['person', 'full_name', 'phone_number']
+
+# class PersonRegisterSerializer(serializers.Serializer):
+#     person = serializers.PrimaryKeyRelatedField(read_only=True,)
+#     email = serializers.EmailField(required=User.USERNAME_FIELD)
+#     full_name = serializers.CharField(required=True)
+#     phone_number = serializers.CharField(required=True)
+#     password = serializers.CharField(write_only=True)
+
+#     def get_cleaned_data(self):
+#             data = {
+#                 'password': self.validated_data.get('password', ''),
+#                 'email': self.validated_data.get('email', ''),
+#                 'full_name' : self.validated_data.get('full_name', ''),
+#                 'phone_number' : self.validated_data.get('address', ''),
+#             }
+#             return data
+
+
+#     def save(self):
+#         print(self.validated_data)
+#         self.cleaned_data = self.get_cleaned_data
+#         user = UserSerializer(data={'email': self.validated_data['email'],
+#                                 'password': self.validated_data['password']})
+#         print(user)
+#         user.is_valid(raise_exception=True)
+#         user.is_person = True
+#         user.save()
+#         print(user)
+#         person = Person(person=user, full_name=self.cleaned_data.get('full_name'), 
+#                 phone_number=self.cleaned_data.get('phone_number'),
+#                 )
+#         person.save()
+#         return user

@@ -7,15 +7,15 @@ from django.urls import reverse
 import jwt
 from core.settings import SECRET_KEY
 
-from users.models import GigaUser
-from .serializers import RegisterSerializer
+from users.models import User
+from .serializers import PersonSignUpSerializer
 from .utils import Utils
 from core.settings import SECRET_KEY
 
 # Create your views here.
 class RegisterView(generics.GenericAPIView, mixins.CreateModelMixin):
     permissions_classes=[permissions.AllowAny]
-    serializer_class=RegisterSerializer
+    serializer_class=PersonSignUpSerializer
 
     def post(self, request, *args, **kwargs):
         serializer = self.get_serializer(data=request.data)
@@ -23,7 +23,7 @@ class RegisterView(generics.GenericAPIView, mixins.CreateModelMixin):
         serializer.save()
 
         user_data = serializer.data
-        user = GigaUser.objects.get(email=user_data['email'])
+        user = User.objects.get(email=user_data['email'])
         token = RefreshToken.for_user(user).access_token
         site = f"http://{get_current_site(request).domain}email-verify/?token={token}"
 
@@ -41,7 +41,7 @@ class VerifyView(generics.GenericAPIView):
         token = request.GET.get('token')
         try:
             payload = jwt.decode(jwt=token, algorithms=SECRET_KEY)
-            users = GigaUser.objects.get(id=payload['user_id'])
+            users = User.objects.get(id=payload['user_id'])
 
             if not users.is_active:
                 users.is_active=True
