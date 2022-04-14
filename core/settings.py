@@ -41,10 +41,12 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'rest_framework',
     'rest_framework_simplejwt',
+    'drf_yasg',
     'phonenumber_field',
     'crowdfunding',
     'crowdfunding_api',
-    'users',
+    # 'users',
+    'accounts',
 ]
 
 MIDDLEWARE = [
@@ -131,7 +133,7 @@ REST_FRAMEWORK ={
     ],
     'DEFAULT_AUTHENTICATION_CLASSES': (
         'rest_framework_simplejwt.authentication.JWTAuthentication',
-    )
+    ),
 }
 
 # Default primary key field type
@@ -140,7 +142,7 @@ REST_FRAMEWORK ={
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 # Custom user model
-AUTH_USER_MODEL = "users.GigaUser"
+AUTH_USER_MODEL = "accounts.User"
 
 SIMPLE_JWT = {
     'ACCESS_TOKEN_LIFETIME': timedelta(minutes=5),
@@ -170,5 +172,3 @@ SIMPLE_JWT = {
 
 EMAIL_USE_TLS = True
 EMAIL_HOST = 'smtp.gmail.com'
-EMAIL_HOST_USER = 'wonderdavid2@gmail.com'
-EMAIL_HOST_PASSWORD = 'w0nd3rd2'
