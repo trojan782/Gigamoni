@@ -4,6 +4,14 @@ from phonenumber_field.modelfields import PhoneNumberField
 
 # Create your models here.
 
+class UserManager(BaseUserManager):
+
+    def create_user(self, email, password, **other_fields):
+        email = self.normalize_email(email)
+        user = self.model(email=email, **other_fields)
+        user.set_password(password)
+        user.save()
+        return user
 
 class User(AbstractUser):
     is_person = models.BooleanField(default=False)
@@ -18,6 +26,7 @@ class User(AbstractUser):
     is_active = models.BooleanField(default=False)
     is_staff = models.BooleanField(default=False)
 
+    objects = UserManager()
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = []
 

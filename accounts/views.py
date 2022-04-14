@@ -22,19 +22,28 @@ class RegisterView(generics.GenericAPIView, mixins.CreateModelMixin):
         serializer.is_valid(raise_exception=True)
         serializer.save()
 
-        # user_data = serializer.data
-        # user = Person.objects.get(email=user_data['email'])
-        # token = RefreshToken.for_user(user).access_token
-        # site = f"http://{get_current_site(request).domain}email-verify/?token={token}"
+        user_data = serializer.data
+        user = Person.objects.get(email=user_data['email'])
+        token = RefreshToken.for_user(user).access_token
+        site = f"http://{get_current_site(request).domain}email-verify/?token={token}"
 
-        # email = {
-        #     'email_body': f"Hi {user.full_name}, Use the link below to verify your email \n{site}",
-        #     'email_subject': 'Verify your email',
-        #     'to_email': (user.email,)
-        # }
-        # Utils.send_email(email)
+        email = {
+            'email_body': f"Hi {user.full_name}, Use the link below to verify your email \n{site}",
+            'email_subject': 'Verify your email',
+            'to_email': (user.email,)
+        }
+        Utils.send_email(email)
 
         return response.Response(status=status.HTTP_201_CREATED)
+
+class CompanyRegisterView(generics.GenericAPIView, mixins.CreateModelMixin):
+    permissions_classes=[permissions.AllowAny]
+    serializer_class=PersonSignUpSerializer
+
+    def post(self, request, *args, **kwargs):
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
         
 class VerifyView(generics.GenericAPIView):
     def get(self, request, *args, **kwargs):
