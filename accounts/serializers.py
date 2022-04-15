@@ -43,6 +43,7 @@ class CompanyStage1Serializer(serializers.ModelSerializer):
         company.company_name = self.validated_data.get('full_name')
         company.company_type = self.validated_data.get('company_type')
         company.rc_no = self.validated_data.get('rc_no')
+        company.save()
         return company
     
     
@@ -53,13 +54,14 @@ class CompanyStage2Serializer(serializers.ModelSerializer):
     gps_cordinates = serializers.CharField(required=True)
 
     class Meta:
-        model = User
+        model = Company
         fields = ['company_address', 'utility_bill', 'gps_cordinates']
 
     def create(self, company=None):
         company['company_address'] = self.validated_data.get('company_address')
         company['utility_bill'] = self.validated_data.get('utility_bill')
         company['gps_cordinates'] = self.validated_data.get('gps_cordinates')
+        company.save()
         return company
         
 class CompanyStage3Serializer(serializers.ModelSerializer):
@@ -73,7 +75,7 @@ class CompanyStage3Serializer(serializers.ModelSerializer):
 
 
     class Meta:
-        model = User
+        model = Company
         fields = ['reference_letter', 'contact_person_name', 'contact_person_email', 'contact_person_number', 'bank_details', 'bvn', 'credit_check']
 
     def create(self, company=None):

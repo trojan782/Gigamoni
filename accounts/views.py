@@ -8,7 +8,7 @@ from django.urls import reverse
 import jwt
 from core.settings import SECRET_KEY
 
-from accounts.models import User, Person
+from accounts.models import User, Person, Company
 from .serializers import PersonSignUpSerializer, CompanyStage1Serializer, CompanyStage2Serializer, CompanyStage3Serializer
 from .utils import Utils
 from core.settings import SECRET_KEY
@@ -42,33 +42,23 @@ class CompanyStage1View(generics.GenericAPIView, mixins.CreateModelMixin):
     serializer_class=CompanyStage1Serializer
 
     def post(self, request, *args, **kwargs):
-        serializer = self.get_serializer(data=request.data, **kwargs)
-        serializer.is_valid(raise_exception=True)
-        serializer.save()
-        
-        return HttpResponseRedirect(f"http://localhost:8000/api/accounts/register/company2/?person={serializer.data}")
+        return self.create(request, *args, **kwargs)
 
-class CompanyStage2View(generics.GenericAPIView, mixins.UpdateModelMixin):
+class CompanyStage2View(generics.UpdateAPIView):
+    queryset = Company.objects.all()
     permissions_classes=[permissions.AllowAny]
     serializer_class = CompanyStage2Serializer
 
     def put(self, request, *args, **kwargs):
-        serializer = self.get_serializer(data=request.data, **kwargs)
-        serializer.is_valid(raise_exception=True)
-        serializer.save()
+        return self.partial_update(self, request, *args, **kwargs)
 
-        return HttpResponseRedirect(f"http://localhost:8000/api/accounts/register/company3/?person={serializer.data}")
-
-class CompanyStage3View(generics.GenericAPIView, mixins.UpdateModelMixin):
+class CompanyStage3View(generics.UpdateAPIView):
+    queryset = Company.objects.all()
     permission_classes=[permissions.AllowAny]
     serializer_class = CompanyStage3Serializer
 
     def put(self, request, *args, **kwargs):
-        serializer = self.get_serializer(data=request.data, **kwargs)
-        serializer.is_valid(raise_exception=True)
-        serializer.save()
-
-        return response.Response(status=status.HTTP_201_CREATED)
+        return self.partial_update(self, request, *args, **kwargs)
         
 class VerifyView(generics.GenericAPIView):
     def get(self, request, *args, **kwargs):
