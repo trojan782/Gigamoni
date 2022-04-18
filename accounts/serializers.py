@@ -40,7 +40,7 @@ class CompanyStage1Serializer(serializers.ModelSerializer):
         user.save()
 
         company = Company.objects.create(company=user)
-        company.company_name = self.validated_data.get('full_name')
+        company.company_name = self.validated_data.get('company_name')
         company.company_type = self.validated_data.get('company_type')
         company.rc_no = self.validated_data.get('rc_no')
         company.save()
@@ -49,42 +49,22 @@ class CompanyStage1Serializer(serializers.ModelSerializer):
     
 
 class CompanyStage2Serializer(serializers.ModelSerializer):
-    company_address = serializers.CharField(required=True)
     utility_bill = serializers.FileField(required=True)
-    gps_cordinates = serializers.CharField(required=True)
-
     class Meta:
         model = Company
         fields = ['company_address', 'utility_bill', 'gps_cordinates']
 
-    def create(self, company=None):
-        company['company_address'] = self.validated_data.get('company_address')
-        company['utility_bill'] = self.validated_data.get('utility_bill')
-        company['gps_cordinates'] = self.validated_data.get('gps_cordinates')
-        company.save()
+    def update(self, instance, validated_data):
+        company = Company.objects.get(pk=instance.id)
+        Company.objects.filter(pk=instance.id).update(**validated_data)
         return company
         
 class CompanyStage3Serializer(serializers.ModelSerializer):
-    reference_letter = serializers.FileField(required=True)
-    contact_person_name = serializers.CharField(required=True)
-    contact_person_email = serializers.EmailField(required=True)
-    contact_person_number = serializers.CharField(required=True)
-    bank_details = serializers.CharField(required=True)
-    bvn = serializers.CharField(required=True)
-    credit_check = serializers.BooleanField(required=True)
-
-
     class Meta:
         model = Company
         fields = ['reference_letter', 'contact_person_name', 'contact_person_email', 'contact_person_number', 'bank_details', 'bvn', 'credit_check']
 
-    def create(self, company=None):
-        company['reference_letter'] = self.validated_data.get('reference_letter')
-        company['contact_person_name'] = self.validated_data.get('contact_person_name')
-        company['contact_person_email'] = self.validated_data.get('contact_person_email')
-        company['contact_person_number'] = self.validated_data.get('contact_person_number')
-        company['bank_details'] = self.validated_data.get('bank_details')
-        company['bvn'] = self.validated_data.get('bvn')
-        company['credit_check'] = self.validated_data.get('credit_check')
-        print(company)
+    def update(self, instance, validated_data):
+        company = Company.objects.get(pk=instance.id)
+        Company.objects.filter(pk=instance.id).update(**validated_data)
         return company

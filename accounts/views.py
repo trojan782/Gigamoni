@@ -42,23 +42,26 @@ class CompanyStage1View(generics.GenericAPIView, mixins.CreateModelMixin):
     serializer_class=CompanyStage1Serializer
 
     def post(self, request, *args, **kwargs):
-        return self.create(request, *args, **kwargs)
+        serializer = self.get_serializer(data=request.data, **kwargs)
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
+        return response.Response(status=status.HTTP_201_CREATED)
 
 class CompanyStage2View(generics.UpdateAPIView):
     queryset = Company.objects.all()
     permissions_classes=[permissions.AllowAny]
     serializer_class = CompanyStage2Serializer
 
-    def put(self, request, *args, **kwargs):
-        return self.partial_update(self, request, *args, **kwargs)
+    def patch(self, request, *args, **kwargs):
+        return self.partial_update(request, *args, **kwargs)
 
 class CompanyStage3View(generics.UpdateAPIView):
     queryset = Company.objects.all()
     permission_classes=[permissions.AllowAny]
     serializer_class = CompanyStage3Serializer
 
-    def put(self, request, *args, **kwargs):
-        return self.partial_update(self, request, *args, **kwargs)
+    def patch(self, request, *args, **kwargs):
+        return self.partial_update(request, *args, **kwargs)
         
 class VerifyView(generics.GenericAPIView):
     def get(self, request, *args, **kwargs):

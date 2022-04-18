@@ -48,16 +48,16 @@ class Company(models.Model):
 
     company_name = models.CharField(max_length=255, verbose_name="Company Name")
     company_type = models.CharField(max_length=255, verbose_name="Company Type")
-    company_address = models.CharField(max_length=255, verbose_name="Company Address", default="Address")
+    company_address = models.CharField(max_length=255, verbose_name="Company Address")
     rc_no = models.CharField(max_length=12, verbose_name="RC NO")
-    bank_details = models.CharField(max_length=120, verbose_name="Bank Details", default="details")
+    bank_details = models.CharField(max_length=120, verbose_name="Bank Details")
     bvn = models.CharField(max_length=12, verbose_name="BVN")
-    utility_bill = models.CharField(max_length=120, verbose_name="Current Utility Bill", default="utility")
+    utility_bill = models.CharField(max_length=120, verbose_name="Current Utility Bill")
     reference_letter = models.FileField(verbose_name="Letter of Reference")
-    contact_person_name = models.CharField(max_length=255, verbose_name='Contact Person Name', default="Name")
-    contact_person_email = models.EmailField(max_length=255, verbose_name="Contact Person Email", default="mail@gmail.com")
-    contact_person_number = models.CharField(max_length=12, verbose_name="Contact Person Number", default="0818202023")
-    gps_cordinates = models.CharField(verbose_name="GPS Cordinates", max_length=255, default="jdfjfowjr")
+    contact_person_name = models.CharField(max_length=255, verbose_name='Contact Person Name')
+    contact_person_email = models.EmailField(max_length=255, verbose_name="Contact Person Email")
+    contact_person_number = models.CharField(max_length=12, verbose_name="Contact Person Number")
+    gps_cordinates = models.CharField(verbose_name="GPS Cordinates", max_length=255)
     credit_check = models.BooleanField(default=False)
 
     REQUIRED_FIELDS=['company_name', 'company_type', 'rc_no', 'bank_details', 'bvn', 'utility_bill', 'reference_letter', 'company_address', 'contact_person_name', 'contact_person_name', 'contact_person_number', 'credit_check']
