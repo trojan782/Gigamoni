@@ -1,4 +1,5 @@
 from ast import Try
+from django.http import HttpResponseRedirect
 from django.shortcuts import render
 from rest_framework import permissions, generics, mixins, status, response
 from rest_framework_simplejwt.tokens import RefreshToken
@@ -7,13 +8,13 @@ from django.urls import reverse
 import jwt
 from core.settings import SECRET_KEY
 
-from accounts.models import User, Person
-from .serializers import PersonSignUpSerializer
+from accounts.models import User, Person, Company
+from .serializers import PersonSignUpSerializer, CompanyStage1Serializer, CompanyStage2Serializer, CompanyStage3Serializer
 from .utils import Utils
 from core.settings import SECRET_KEY
 
 # Create your views here.
-class RegisterView(generics.GenericAPIView, mixins.CreateModelMixin):
+class UserRegisterView(generics.GenericAPIView, mixins.CreateModelMixin):
     permissions_classes=[permissions.AllowAny]
     serializer_class=PersonSignUpSerializer
 
@@ -36,14 +37,31 @@ class RegisterView(generics.GenericAPIView, mixins.CreateModelMixin):
 
         return response.Response(status=status.HTTP_201_CREATED)
 
-class CompanyRegisterView(generics.GenericAPIView, mixins.CreateModelMixin):
+class CompanyStage1View(generics.GenericAPIView, mixins.CreateModelMixin):
     permissions_classes=[permissions.AllowAny]
-    serializer_class=PersonSignUpSerializer
+    serializer_class=CompanyStage1Serializer
 
     def post(self, request, *args, **kwargs):
-        serializer = self.get_serializer(data=request.data)
+        serializer = self.get_serializer(data=request.data, **kwargs)
         serializer.is_valid(raise_exception=True)
         serializer.save()
+        return response.Response(status=status.HTTP_201_CREATED)
+
+class CompanyStage2View(generics.UpdateAPIView):
+    queryset = Company.objects.all()
+    permissions_classes=[permissions.AllowAny]
+    serializer_class = CompanyStage2Serializer
+
+    def patch(self, request, *args, **kwargs):
+        return self.partial_update(request, *args, **kwargs)
+
+class CompanyStage3View(generics.UpdateAPIView):
+    queryset = Company.objects.all()
+    permission_classes=[permissions.AllowAny]
+    serializer_class = CompanyStage3Serializer
+
+    def patch(self, request, *args, **kwargs):
+        return self.partial_update(request, *args, **kwargs)
         
 class VerifyView(generics.GenericAPIView):
     def get(self, request, *args, **kwargs):

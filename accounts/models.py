@@ -48,14 +48,19 @@ class Company(models.Model):
 
     company_name = models.CharField(max_length=255, verbose_name="Company Name")
     company_type = models.CharField(max_length=255, verbose_name="Company Type")
+    company_address = models.CharField(max_length=255, verbose_name="Company Address")
     rc_no = models.CharField(max_length=12, verbose_name="RC NO")
-    bank_details = models.CharField(max_length=120, verbose_name="details")
+    bank_details = models.CharField(max_length=120, verbose_name="Bank Details")
     bvn = models.CharField(max_length=12, verbose_name="BVN")
     utility_bill = models.CharField(max_length=120, verbose_name="Current Utility Bill")
     reference_letter = models.FileField(verbose_name="Letter of Reference")
-    credit_check = models.CharField(max_length=120)
+    contact_person_name = models.CharField(max_length=255, verbose_name='Contact Person Name')
+    contact_person_email = models.EmailField(max_length=255, verbose_name="Contact Person Email")
+    contact_person_number = models.CharField(max_length=12, verbose_name="Contact Person Number")
+    gps_cordinates = models.CharField(verbose_name="GPS Cordinates", max_length=255)
+    credit_check = models.BooleanField(default=False)
 
-    REQUIRED_FIELDS=['company_name', 'company_type', 'rc_no', 'bank_details', 'bvn', 'utility_bill', 'reference_letter', 'credit_check']
+    REQUIRED_FIELDS=['company_name', 'company_type', 'rc_no', 'bank_details', 'bvn', 'utility_bill', 'reference_letter', 'company_address', 'contact_person_name', 'contact_person_name', 'contact_person_number', 'credit_check']
 
     def __str__(self):
         return self.company.email
