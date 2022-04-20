@@ -45,7 +45,6 @@ INSTALLED_APPS = [
     'phonenumber_field',
     'crowdfunding',
     'crowdfunding_api',
-    # 'users',
     'accounts',
 ]
 
